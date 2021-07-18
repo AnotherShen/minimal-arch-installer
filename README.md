@@ -9,4 +9,6 @@ Installs
 
 ```
 curl -L https://raw.githubusercontent.com/AnotherShen/minimal-arch-installer/main/archinstall.sh --output archinstall.sh
+chmod +x archinstall.sh
+./archinstall.sh
 ```
