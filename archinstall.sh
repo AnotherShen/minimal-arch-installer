@@ -6,7 +6,7 @@ echo "[Arch Installer] Console keymap is US by default. Refer to install guide t
 # Check that it isn't in UEFI mode
 echo "[Arch Installer] Verifying installation assumptions..."
 BIOS=false
-ls /sys/firmware/efi/efivars || BIOS=true
+ls /sys/firmware/efi/efivars 2> /dev/null || BIOS=true
 if $BIOS ; then
 	echo "[Arch Installer] -> System is in BIOS mode."
 else
