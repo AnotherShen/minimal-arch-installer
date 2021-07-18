@@ -47,7 +47,6 @@ mount /dev/sda2 /mnt
 # Install build packages
 echo "[Arch Installer] Installing build packages."
 pacstrap /mnt base linux linux-firmware
-read -p "Press any key to resume ..."
 
 # Configure the system
 echo "[Arch Installer] Configuring system."
@@ -56,6 +55,7 @@ arch-chroot /mnt ln -sf /usr/share/zoneinfo/Australia/Adelaide /etc/localtime
 arch-chroot /mnt hwclock --systohc
 arch-chroot /mnt sed -i -e "s/#en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/g" /etc/locale.gen
 arch-chroot /mnt locale-gen
+# The next three echo redirects aren't working... why.
 arch-chroot /mnt echo -e "LANG=en_AU.UTF-8\nLANGUAGE=en_AU:en_GB:en" > /etc/locale.conf
 arch-chroot /mnt echo "arch" > /etc/hostname
 arch-chroot /mnt echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.localdomain arch" >> /etc/hosts
@@ -65,8 +65,6 @@ read -p "Press any key to resume ..."
 # Install other packages
 echo "[Arch Installer] Installing other packages."
 pacstrap /mnt vim nano sudo xterm open-vm-tools xorg gnome grub wpa_supplicant wireless_tools networkmanager nm-connection-editor network-manager-applet
-arch-chroot /mnt sed -i -e "s/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g" /etc/sudoers
-read -p "Press any key to resume ..."
 
 # Create accounts
 echo "[Arch Installer] Configure accounts (interaction required)."
@@ -76,6 +74,7 @@ echo "[Arch Installer] -> Set user password."
 arch-chroot /mnt useradd -m user
 arch-chroot /mnt passwd user
 arch-chroot /mnt usermod -aG wheel user
+arch-chroot /mnt sed -i -e "s/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g" /etc/sudoers
 
 # Configure boot loader
 echo "[Arch Installer] Configuring bootloader."
@@ -90,9 +89,9 @@ arch-chroot /mnt systemctl disable dhcpcd.service
 arch-chroot /mnt systemctl enable wpa_supplicant.service
 arch-chroot /mnt systemctl enable vmtoolsd.service
 arch-chroot /mnt systemctl enable vmware-vmblock-fuse.service
-read -p "Press any key to resume ..."
 
 # Exit out chroot and restart
-echo "[Arch Installer] Completed. Restarting..."
+echo "[Arch Installer] Install complete."
+read -p "Press any key to reboot..."
 umount -R /mnt
 reboot
