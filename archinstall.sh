@@ -52,53 +52,51 @@ pacstrap /mnt base linux linux-firmware vim nano
 echo "[Arch Installer] Configuring system."
 genfstab -U /mnt >> /mnt/etc/fstab
 # Enter into chroot environment
-arch-chroot /mnt
-ln -sf /usr/share/zoneinfo/Australia/Adelaide /etc/localtime
-hwclock --systohc
-sed -i -e "s/#en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/g" /etc/locale.gen
-locale-gen
-echo "LANG=en_AU.UTF-8" > /etc/locale.conf
+arch-chroot /mnt ln -sf /usr/share/zoneinfo/Australia/Adelaide /etc/localtime
+arch-chroot /mnt hwclock --systohc
+arch-chroot /mnt sed -i -e "s/#en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/g" /etc/locale.gen
+arch-chroot /mnt locale-gen
+arch-chroot /mnt echo "LANG=en_AU.UTF-8" > /etc/locale.conf
 # Set keyboard layout in /etc/vconsole.conf if changed
-echo "arch" > /etc/hostname
-echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.localdomain arch" >> /etc/hosts
-mkinitcpio -P
+arch-chroot /mnt echo "arch" > /etc/hostname
+arch-chroot /mnt echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.localdomain arch" >> /etc/hosts
+arch-chroot /mnt mkinitcpio -P
 
 # Create accounts
 echo "[Arch Installer] Set root password."
-passwd
+arch-chroot /mnt passwd
 echo "[Arch Installer] Installing sudo."
-pacman -S sudo --noconfirm
+arch-chroot /mnt pacman -S sudo --noconfirm
 echo "[Arch Installer] Set user password."
-useradd -m user
-passwd user
-usermod -aG wheel user
+arch-chroot /mnt useradd -m user
+arch-chroot /mnt passwd user
+arch-chroot /mnt usermod -aG wheel user
 
 # Install boot loader
 echo "[Arch Installer] Installing bootloader."
-pacman -S grub
-grub-install /dev/sda
-grub-mkconfig -o /boot/grub/grub.cfg
+arch-chroot /mnt pacman -S grub
+arch-chroot /mnt grub-install /dev/sda
+arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
 # Install desktop environment
 echo "[Arch Installer] Installing desktop."
-pacman -S xorg --noconfirm
-pacman -S gnome --noconfirm
-systemctl enable gdm.service
+arch-chroot /mnt pacman -S xorg --noconfirm
+arch-chroot /mnt pacman -S gnome --noconfirm
+arch-chroot /mnt systemctl enable gdm.service
 
 # Install network manager
 echo "[Arch Installer] Installing network manager."
-pacman -S wpa_supplicant wireless_tools networkmanager --noconfirm
-pacman -S nm-connection-editor network-manager-applet --noconfirm
-systemctl enable NetworkManager.service
-systemctl disable dhcpcd.service
-systemctl enable wpa_supplicant.service
+arch-chroot /mnt pacman -S wpa_supplicant wireless_tools networkmanager --noconfirm
+arch-chroot /mnt pacman -S nm-connection-editor network-manager-applet --noconfirm
+arch-chroot /mnt systemctl enable NetworkManager.service
+arch-chroot /mnt systemctl disable dhcpcd.service
+arch-chroot /mnt systemctl enable wpa_supplicant.service
 
 # Install basic packages
 echo "[Arch Installer] Installing VM tools."
-pacman -S open-vm-tools --noconfirm
+arch-chroot /mnt pacman -S open-vm-tools --noconfirm
 
 # Exit out chroot and restart
 echo "[Arch Installer] Completed. Restarting..."
-exit
 umount -R /mnt
 reboot
