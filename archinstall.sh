@@ -88,7 +88,7 @@ systemctl enable gdm.service
 # Install network manager
 echo "[Arch Installer] Installing network manager."
 pacman -S wpa_supplicant wireless_tools networkmanager --noconfirm
-pacman -S nm-connection-editor network-manager-applet
+pacman -S nm-connection-editor network-manager-applet --noconfirm
 systemctl enable NetworkManager.service
 systemctl disable dhcpcd.service
 systemctl enable wpa_supplicant.service
