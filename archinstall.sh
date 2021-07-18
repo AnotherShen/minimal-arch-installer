@@ -60,12 +60,12 @@ arch-chroot /mnt echo -e "LANG=en_AU.UTF-8\nLANGUAGE=en_AU:en_GB:en" > /etc/loca
 arch-chroot /mnt echo "arch" > /etc/hostname
 arch-chroot /mnt echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.localdomain arch" >> /etc/hosts
 arch-chroot /mnt mkinitcpio -P
-arch-chroot /mnt sed -i -e "s/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g" /etc/sudoers
 read -p "Press any key to resume ..."
 
-# Install packages
+# Install other packages
 echo "[Arch Installer] Installing other packages."
 pacstrap /mnt vim nano sudo xterm open-vm-tools xorg gnome grub wpa_supplicant wireless_tools networkmanager nm-connection-editor network-manager-applet
+arch-chroot /mnt sed -i -e "s/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g" /etc/sudoers
 read -p "Press any key to resume ..."
 
 # Create accounts
