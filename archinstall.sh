@@ -65,11 +65,11 @@ arch-chroot /mnt mkinitcpio -P
 # Create accounts
 echo "[Arch Installer] Set root password."
 arch-chroot /mnt passwd
-echo "[Arch Installer] Installing sudo."
-arch-chroot /mnt pacman -S sudo --noconfirm
 echo "[Arch Installer] Set user password."
 arch-chroot /mnt useradd -m user
 arch-chroot /mnt passwd user
+echo "[Arch Installer] Installing sudo and adding user."
+arch-chroot /mnt pacman -S sudo --noconfirm
 arch-chroot /mnt usermod -aG wheel user
 
 # Install boot loader
