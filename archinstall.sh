@@ -98,5 +98,5 @@ arch-chroot /mnt pacman -S open-vm-tools --noconfirm
 
 # Exit out chroot and restart
 echo "[Arch Installer] Completed. Restarting..."
-umount -R /mnt
-reboot
+#umount -R /mnt
+#reboot
