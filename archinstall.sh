@@ -51,25 +51,17 @@ pacstrap /mnt base linux linux-firmware
 # Configure the system
 echo "[Arch Installer] Configuring system."
 genfstab -U /mnt >> /mnt/etc/fstab
-arch-chroot /mnt ln -sf /usr/share/zoneinfo/Australia/Adelaide /etc/localtime
-arch-chroot /mnt hwclock --systohc
-arch-chroot /mnt sed -i -e "s/#en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/g" /etc/locale.gen
-arch-chroot /mnt locale-gen
-# Heredoc to write to files with arch-chroot
+# Heredoc to run commands in arch-chroot. Needed for echos.
 arch-chroot /mnt /bin/bash <<END
+ln -sf /usr/share/zoneinfo/Australia/Adelaide /etc/localtime
+hwclock --systohc
+sed -i -e "s/#en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/g" /etc/locale.gen
+locale-gen
 echo -e "LANG=en_AU.UTF-8\nLANGUAGE=en_AU:en_GB:en" > /etc/locale.conf
 echo "arch" > /etc/hostname
 echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.localdomain arch" >> /etc/hosts
 END
-#arch-chroot /mnt echo -e "LANG=en_AU.UTF-8\nLANGUAGE=en_AU:en_GB:en" > /etc/locale.conf
-#arch-chroot /mnt echo "arch" > /etc/hostname
-#arch-chroot /mnt echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.localdomain arch" >> /etc/hosts
-# Debug
-arch-chroot /mnt cat /etc/locale.conf
-arch-chroot /mnt cat /etc/hostname
-arch-chroot /mnt cat /etc/hosts
 #arch-chroot /mnt mkinitcpio -P
-read -p "Press any key to resume ..."
 
 # Install other packages
 echo "[Arch Installer] Installing other packages."
@@ -85,19 +77,19 @@ arch-chroot /mnt passwd user
 arch-chroot /mnt usermod -aG wheel user
 arch-chroot /mnt sed -i -e "s/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g" /etc/sudoers
 
-# Configure boot loader
-echo "[Arch Installer] Configuring bootloader."
-arch-chroot /mnt grub-install /dev/sda
-arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
-
 # Configure services
-echo "[Arch Installer] Configuring desktop & network services."
-arch-chroot /mnt systemctl enable gdm.service
-arch-chroot /mnt systemctl enable NetworkManager.service
-arch-chroot /mnt systemctl disable dhcpcd.service
-arch-chroot /mnt systemctl enable wpa_supplicant.service
-arch-chroot /mnt systemctl enable vmtoolsd.service
-arch-chroot /mnt systemctl enable vmware-vmblock-fuse.service
+echo "[Arch Installer] Configuring bootloader, desktop & network services."
+# Heredoc to run commands in arch-chroot. Not needed but cleaner.
+arch-chroot /mnt /bin/bash <<END
+grub-install /dev/sda
+grub-mkconfig -o /boot/grub/grub.cfg
+systemctl enable gdm.service
+systemctl enable NetworkManager.service
+systemctl disable dhcpcd.service
+systemctl enable wpa_supplicant.service
+systemctl enable vmtoolsd.service
+systemctl enable vmware-vmblock-fuse.service
+END
 
 # Exit out chroot and restart
 echo "[Arch Installer] Install complete."
