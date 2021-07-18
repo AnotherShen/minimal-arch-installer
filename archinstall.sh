@@ -46,7 +46,7 @@ mount /dev/sda2 /mnt
 
 # Install essential packages
 echo "[Arch Installer] Installing essential packages."
-pacstrap /mnt base linux linux-firmware vim nano
+pacstrap /mnt base linux linux-firmware vim nano sudo xterm open-vm-tools xorg gnome grub wpa_supplicant wireless_tools networkmanager nm-connection-editor network-manager-applet
 
 # Configure the system
 echo "[Arch Installer] Configuring system."
@@ -69,33 +69,33 @@ echo "[Arch Installer] Set user password."
 arch-chroot /mnt useradd -m user
 arch-chroot /mnt passwd user
 echo "[Arch Installer] Installing sudo and adding user."
-arch-chroot /mnt pacman -S sudo --noconfirm
+#arch-chroot /mnt pacman -S sudo --noconfirm
 arch-chroot /mnt usermod -aG wheel user
 
 # Install boot loader
 echo "[Arch Installer] Installing bootloader."
-arch-chroot /mnt pacman -S grub --noconfirm
+#arch-chroot /mnt pacman -S grub --noconfirm
 arch-chroot /mnt grub-install /dev/sda
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
 # Install desktop environment
 echo "[Arch Installer] Installing desktop."
-arch-chroot /mnt pacman -S xorg --noconfirm
-arch-chroot /mnt pacman -S gnome --noconfirm
+#arch-chroot /mnt pacman -S xorg --noconfirm
+#arch-chroot /mnt pacman -S gnome --noconfirm
 arch-chroot /mnt systemctl enable gdm.service
 
 # Install network manager
 echo "[Arch Installer] Installing network manager."
-arch-chroot /mnt pacman -S wpa_supplicant wireless_tools networkmanager --noconfirm
-arch-chroot /mnt pacman -S nm-connection-editor network-manager-applet --noconfirm
+#arch-chroot /mnt pacman -S wpa_supplicant wireless_tools networkmanager --noconfirm
+#arch-chroot /mnt pacman -S nm-connection-editor network-manager-applet --noconfirm
 arch-chroot /mnt systemctl enable NetworkManager.service
 arch-chroot /mnt systemctl disable dhcpcd.service
 arch-chroot /mnt systemctl enable wpa_supplicant.service
 
 # Install basic packages
-echo "[Arch Installer] Installing VM tools."
-arch-chroot /mnt pacman -S open-vm-tools --noconfirm
-arch-chroot /mnt pacman -S xterm --noconfirm
+#echo "[Arch Installer] Installing VM tools."
+#arch-chroot /mnt pacman -S open-vm-tools --noconfirm
+#arch-chroot /mnt pacman -S xterm --noconfirm
 
 # Exit out chroot and restart
 echo "[Arch Installer] Completed. Restarting..."
