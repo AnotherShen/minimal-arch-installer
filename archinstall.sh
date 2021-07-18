@@ -59,7 +59,7 @@ arch-chroot /mnt locale-gen
 arch-chroot /mnt echo -e "LANG=en_AU.UTF-8\nLANGUAGE=en_AU:en_GB:en" > /etc/locale.conf
 arch-chroot /mnt echo "arch" > /etc/hostname
 arch-chroot /mnt echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.localdomain arch" >> /etc/hosts
-arch-chroot /mnt mkinitcpio -P
+#arch-chroot /mnt mkinitcpio -P
 read -p "Press any key to resume ..."
 
 # Install other packages
