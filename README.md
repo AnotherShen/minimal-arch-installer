@@ -1,11 +1,11 @@
 # Minimal Arch Installer
-A simple script to install Arch using BIOS presets targeted for Virtual Machines.
+A simple Arch install script using BIOS presets for Virtual Machines installs.
 
-Installs
+Automatically configures Arch as described by the Wiki and installs the following:
 - Gnome Desktop
 - Network Manager
-- Sudo
 - Open VM Tools
+- Sudo
 
 ```
 curl -L https://raw.githubusercontent.com/AnotherShen/minimal-arch-installer/main/archinstall.sh --output archinstall.sh
