@@ -55,10 +55,16 @@ arch-chroot /mnt ln -sf /usr/share/zoneinfo/Australia/Adelaide /etc/localtime
 arch-chroot /mnt hwclock --systohc
 arch-chroot /mnt sed -i -e "s/#en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/g" /etc/locale.gen
 arch-chroot /mnt locale-gen
-# The next three echo redirects aren't working... why.
-arch-chroot /mnt echo -e "LANG=en_AU.UTF-8\nLANGUAGE=en_AU:en_GB:en" > /etc/locale.conf
-arch-chroot /mnt echo "arch" > /etc/hostname
-arch-chroot /mnt echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.localdomain arch" >> /etc/hosts
+# Heredoc to write to files with arch-chroot
+arch-chroot /mnt /bin/bash <<END
+echo -e "LANG=en_AU.UTF-8\nLANGUAGE=en_AU:en_GB:en" > /etc/locale.conf
+echo "arch" > /etc/hostname
+echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.localdomain arch" >> /etc/hosts
+END
+#arch-chroot /mnt echo -e "LANG=en_AU.UTF-8\nLANGUAGE=en_AU:en_GB:en" > /etc/locale.conf
+#arch-chroot /mnt echo "arch" > /etc/hostname
+#arch-chroot /mnt echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.localdomain arch" >> /etc/hosts
+# Debug
 arch-chroot /mnt cat /etc/locale.conf
 arch-chroot /mnt cat /etc/hostname
 arch-chroot /mnt cat /etc/hosts
