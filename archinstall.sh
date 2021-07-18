@@ -95,6 +95,7 @@ arch-chroot /mnt systemctl enable wpa_supplicant.service
 # Install basic packages
 echo "[Arch Installer] Installing VM tools."
 arch-chroot /mnt pacman -S open-vm-tools --noconfirm
+arch-chroot /mnt pacman -S xterm --noconfirm
 
 # Exit out chroot and restart
 echo "[Arch Installer] Completed. Restarting..."
