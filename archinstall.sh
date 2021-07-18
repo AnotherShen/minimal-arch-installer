@@ -44,58 +44,53 @@ echo "[Arch Installer] Mounting disk."
 swapon /dev/sda1
 mount /dev/sda2 /mnt
 
-# Install essential packages
-echo "[Arch Installer] Installing essential packages."
-pacstrap /mnt base linux linux-firmware vim nano sudo xterm open-vm-tools xorg gnome grub wpa_supplicant wireless_tools networkmanager nm-connection-editor network-manager-applet
+# Install build packages
+echo "[Arch Installer] Installing build packages."
+pacstrap /mnt base linux linux-firmware
+read -p "Press any key to resume ..."
 
 # Configure the system
 echo "[Arch Installer] Configuring system."
 genfstab -U /mnt >> /mnt/etc/fstab
-# Enter into chroot environment
 arch-chroot /mnt ln -sf /usr/share/zoneinfo/Australia/Adelaide /etc/localtime
 arch-chroot /mnt hwclock --systohc
 arch-chroot /mnt sed -i -e "s/#en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/g" /etc/locale.gen
 arch-chroot /mnt locale-gen
 arch-chroot /mnt echo "LANG=en_AU.UTF-8" > /etc/locale.conf
-# Set keyboard layout in /etc/vconsole.conf if changed
 arch-chroot /mnt echo "arch" > /etc/hostname
 arch-chroot /mnt echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.localdomain arch" >> /etc/hosts
 arch-chroot /mnt mkinitcpio -P
+arch-chroot /mnt sed -i -e "s/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g" /etc/sudoers
+read -p "Press any key to resume ..."
+
+# Install packages
+echo "[Arch Installer] Installing other packages."
+pacstrap /mnt vim nano sudo xterm open-vm-tools xorg gnome grub wpa_supplicant wireless_tools networkmanager nm-connection-editor network-manager-applet
+read -p "Press any key to resume ..."
 
 # Create accounts
-echo "[Arch Installer] Set root password."
+echo "[Arch Installer] Configure accounts (interaction required)."
+echo "[Arch Installer] -> Set root password."
 arch-chroot /mnt passwd
-echo "[Arch Installer] Set user password."
+echo "[Arch Installer] -> Set user password."
 arch-chroot /mnt useradd -m user
 arch-chroot /mnt passwd user
-echo "[Arch Installer] Installing sudo and adding user."
-#arch-chroot /mnt pacman -S sudo --noconfirm
 arch-chroot /mnt usermod -aG wheel user
 
-# Install boot loader
-echo "[Arch Installer] Installing bootloader."
-#arch-chroot /mnt pacman -S grub --noconfirm
+# Configure boot loader
+echo "[Arch Installer] Configuring bootloader."
 arch-chroot /mnt grub-install /dev/sda
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
-# Install desktop environment
-echo "[Arch Installer] Installing desktop."
-#arch-chroot /mnt pacman -S xorg --noconfirm
-#arch-chroot /mnt pacman -S gnome --noconfirm
+# Configure services
+echo "[Arch Installer] Configuring desktop & network services."
 arch-chroot /mnt systemctl enable gdm.service
-
-# Install network manager
-echo "[Arch Installer] Installing network manager."
-#arch-chroot /mnt pacman -S wpa_supplicant wireless_tools networkmanager --noconfirm
-#arch-chroot /mnt pacman -S nm-connection-editor network-manager-applet --noconfirm
 arch-chroot /mnt systemctl enable NetworkManager.service
 arch-chroot /mnt systemctl disable dhcpcd.service
 arch-chroot /mnt systemctl enable wpa_supplicant.service
-
-# Install basic packages
-#echo "[Arch Installer] Installing VM tools."
-#arch-chroot /mnt pacman -S open-vm-tools --noconfirm
-#arch-chroot /mnt pacman -S xterm --noconfirm
+arch-chroot /mnt systemctl enable vmtoolsd.service
+arch-chroot /mnt systemctl enable vmware-vmblock-fuse.service
+read -p "Press any key to resume ..."
 
 # Exit out chroot and restart
 echo "[Arch Installer] Completed. Restarting..."
