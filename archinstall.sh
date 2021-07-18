@@ -74,7 +74,7 @@ arch-chroot /mnt usermod -aG wheel user
 
 # Install boot loader
 echo "[Arch Installer] Installing bootloader."
-arch-chroot /mnt pacman -S grub
+arch-chroot /mnt pacman -S grub --noconfirm
 arch-chroot /mnt grub-install /dev/sda
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
