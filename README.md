@@ -6,3 +6,7 @@ Installs
 - Network Manager
 - Sudo
 - Open VM Tools
+
+```
+curl -L https://raw.githubusercontent.com/AnotherShen/minimal-arch-installer/main/archinstall.sh --output archinstall.sh
+```
