@@ -99,5 +99,5 @@ arch-chroot /mnt pacman -S xterm --noconfirm
 
 # Exit out chroot and restart
 echo "[Arch Installer] Completed. Restarting..."
-#umount -R /mnt
-#reboot
+umount -R /mnt
+reboot
