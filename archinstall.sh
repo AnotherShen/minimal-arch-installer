@@ -61,11 +61,10 @@ echo -e "LANG=en_AU.UTF-8\nLANGUAGE=en_AU:en_GB:en" > /etc/locale.conf
 echo "arch" > /etc/hostname
 echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.localdomain arch" >> /etc/hosts
 END
-#arch-chroot /mnt mkinitcpio -P
 
 # Install other packages
 echo "[Arch Installer] Installing other packages."
-pacstrap /mnt vim nano sudo xterm open-vm-tools xorg gnome grub wpa_supplicant wireless_tools networkmanager nm-connection-editor network-manager-applet
+pacstrap /mnt vim nano sudo open-vm-tools xorg gnome grub wpa_supplicant wireless_tools networkmanager nm-connection-editor network-manager-applet
 
 # Create accounts
 echo "[Arch Installer] Configure accounts (interaction required)."
